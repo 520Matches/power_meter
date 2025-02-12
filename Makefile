@@ -66,4 +66,4 @@ flash: $(BIN)
 
 # 调试
 debug:
-	$(OPENOCD) -f interface/stlink-v2.cfg -f target/hc32l176.cfg
+	$(OPENOCD) -f interface/stlink-v2.cfg -f target/stm32f1x.cfg
