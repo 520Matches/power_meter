@@ -10,12 +10,13 @@ CPU = cortex-m3
 
 # 编译选项
 CFLAGS = -mcpu=$(CPU) -mthumb -nostartfiles -Wall -g -O2
-CFLAGS += -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -Idrivers/inc -Istartup -Icore
+CFLAGS += -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -Iinclude -Istartup -Icore -Idrivers/inc -Iusb/inc
 LDFLAGS = -Tlinker.ld -Wl,-Map=output/$(TARGET).map
 LIBS = -lc -lm -lnosys
 
 # 源文件和目标文件
 SRCS = $(wildcard drivers/src/*.c) \
+	   $(wildcard usb/src/*.c) \
 		startup/system_stm32f10x.c \
 		startup/stm32f10x_it.c \
 		core/core_cm3.c	\
@@ -57,7 +58,10 @@ $(STARTUP:.s=.o):
 
 # 清理
 clean:
-	del /f /q $(subst /,\,$(OBJS) $(ELF) $(BIN) $(HEX) $(OUTPUT)/$(TARGET).map)
+	#windows use
+#	del /f /q $(subst /,\,$(OBJS) $(ELF) $(BIN) $(HEX) $(OUTPUT)/$(TARGET).map)
+#	linux use
+	rm -f $(OBJS) $(STARTUP:.s=.o) $(ELF) $(BIN) $(HEX) $(OUTPUT)/$(TARGET).map
 	rmdir $(OUTPUT)
 
 # 烧录到芯片

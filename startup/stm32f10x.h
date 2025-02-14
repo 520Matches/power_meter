@@ -49,6 +49,9 @@
 #ifndef __STM32F10x_H
 #define __STM32F10x_H
 
+#define __IO volatile
+#define __I volatile const
+
 #ifdef __cplusplus
  extern "C" {
 #endif /* __cplusplus */

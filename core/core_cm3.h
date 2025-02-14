@@ -24,6 +24,8 @@
 #ifndef __CM3_CORE_H__
 #define __CM3_CORE_H__
 
+#include "stm32f10x.h"
+
 /** @addtogroup CMSIS_CM3_core_LintCinfiguration CMSIS CM3 Core Lint Configuration
  *
  * List of Lint messages which will be suppressed and not shown:
