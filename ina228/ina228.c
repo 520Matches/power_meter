@@ -2,7 +2,7 @@
 
 #include "ina228.h"
 
-#define INA228_I2C_ADDR	(0x40)
+#define INA228_I2C_ADDR	(0x40 << 1)
 
 static void ina228_i2c_write(I2C_TypeDef *I2Cx, uint8_t dev_addr, uint8_t *data, uint8_t len)
 {
@@ -65,7 +65,7 @@ void ina228_init(void)
     I2C_InitStruct.I2C_Ack = I2C_Ack_Enable;
     I2C_InitStruct.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
     // I2C_InitStruct.I2C_ClockSpeed = 100000;  // 100kHz
-    I2C_InitStruct.I2C_ClockSpeed = 400000;  // 100kHz
+    I2C_InitStruct.I2C_ClockSpeed = 50000;  // 50kHz
     I2C_Init(I2C2, &I2C_InitStruct);
 
     // 启用 I2C
