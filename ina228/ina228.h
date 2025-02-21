@@ -3,9 +3,10 @@
 
 typedef enum
 {
-	POWER = 0,
-	CURRENT = 1,
-	VOLTAGE = 2,
+	VSHUNT = 0,
+	VBUS = 1,
+	POWER = 2,
+	CURRENT = 3,
 }ina228_regs_t;
 
 void ina228_init(void);

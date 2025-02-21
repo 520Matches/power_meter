@@ -83,13 +83,15 @@ int main(void)
 	// 	}
 	// }
 	
-	double voltage = 0.0;
+	double vbus    = 0.0;
+	double current = 0.0;
 	
 	ina228_init();
 
 	while(1)
 	{
-		voltage = ina228_read(VOLTAGE);
+		vbus    = ina228_read(VBUS);
+		current = ina228_read(CURRENT);
 	}
 
     return 0;
