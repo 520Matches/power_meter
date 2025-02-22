@@ -11,6 +11,8 @@
 
 #include "ina228.h"
 
+#include "timer.h"
+
 __IO uint8_t PrevXferComplete = 1;
 
 // void usb_write(uint8_t *buf, uint32_t len)
@@ -85,13 +87,19 @@ int main(void)
 	
 	double vbus    = 0.0;
 	double current = 0.0;
+
+	timer_init();
 	
 	ina228_init();
 
 	while(1)
 	{
-		vbus    = ina228_read(VBUS);
-		current = ina228_read(CURRENT);
+		if(timer_event)
+		{
+			timer_event = 0;
+			vbus    = ina228_read(VBUS);
+			current = ina228_read(CURRENT);
+		}
 	}
 
     return 0;

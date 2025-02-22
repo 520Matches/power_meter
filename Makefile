@@ -10,8 +10,7 @@ CPU = cortex-m3
 
 # 编译选项
 CFLAGS = -mcpu=$(CPU) -mthumb -nostartfiles -Wall -g -O2
-CFLAGS += -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -Iinclude -Istartup -Icore -Idrivers/inc -Iusb/inc -Iina228
-CFLAGE += -Iperipherals/systick -Iperipherals/timer
+CFLAGS += -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -Iinclude -Istartup -Icore -Idrivers/inc -Iusb/inc -Iina228 -Iperipherals/timer
 LDFLAGS = -Tlinker.ld -Wl,-Map=output/$(TARGET).map
 LIBS = -lc -lm -lnosys
 
@@ -19,6 +18,8 @@ LIBS = -lc -lm -lnosys
 SRCS = $(wildcard drivers/src/*.c) \
 	   $(wildcard usb/src/*.c) \
 	   $(wildcard ina228/*.c) \
+	   $(wildcard peripherals/systick/*.c) \
+	   $(wildcard peripherals/timer/*.c) \
 		startup/system_stm32f10x.c \
 		startup/stm32f10x_it.c \
 		core/core_cm3.c	\
@@ -68,8 +69,8 @@ clean:
 
 # 烧录到芯片
 flash: $(BIN)
-	$(OPENOCD) -f interface/stlink-v2.cfg -f target/stm32f1x.cfg -c "program $(BIN) verify reset exit"
+	$(OPENOCD) -f interface/stlink.cfg -f target/stm32f1x.cfg -c "program ./output/stm32f103c8t6.hex verify reset exit"
 
 # 调试
 debug:
-	$(OPENOCD) -f interface/stlink-v2.cfg -f target/stm32f1x.cfg
+	$(OPENOCD) -f interface/stlink.cfg -f target/stm32f1x.cfg
