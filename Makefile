@@ -11,6 +11,7 @@ CPU = cortex-m3
 # 编译选项
 CFLAGS = -mcpu=$(CPU) -mthumb -nostartfiles -Wall -g -O2
 CFLAGS += -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -Iinclude -Istartup -Icore -Idrivers/inc -Iusb/inc -Iina228
+CFLAGE += -Iperipherals/systick -Iperipherals/timer
 LDFLAGS = -Tlinker.ld -Wl,-Map=output/$(TARGET).map
 LIBS = -lc -lm -lnosys
 

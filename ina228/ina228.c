@@ -46,8 +46,8 @@ static void ina228_i2c_read(I2C_TypeDef *I2Cx, uint8_t dev_addr, uint8_t reg_add
 
 void ina228_init(void)
 {
-	uint8_t config_data[3] = {0x00, 0x80, 0x00};  // 配置INA228寄存器值
-	uint8_t shunt_cal[3] = {0x02, 0x09, 0xc4};  // 配置INA228寄存器值
+	uint8_t config_data[3] = {0x00, 0x84, 0x00};  // 配置INA228寄存器值
+	uint8_t shunt_cal[3] = {0x02, 0x00, 0x04};  // 配置INA228寄存器值
 												  //
 	// 启用 GPIOB 和 I2C1 时钟
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
@@ -67,8 +67,8 @@ void ina228_init(void)
     I2C_InitStruct.I2C_OwnAddress1 = 0x00;
     I2C_InitStruct.I2C_Ack = I2C_Ack_Enable;
     I2C_InitStruct.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-    // I2C_InitStruct.I2C_ClockSpeed = 100000;  // 100kHz
-    I2C_InitStruct.I2C_ClockSpeed = 50000;  // 50kHz
+    I2C_InitStruct.I2C_ClockSpeed = 400000;  // 400kHz
+    // I2C_InitStruct.I2C_ClockSpeed = 50000;  // 50kHz
     I2C_Init(I2C2, &I2C_InitStruct);
 
     // 启用 I2C
@@ -76,7 +76,7 @@ void ina228_init(void)
 
 	//配置INA228,分流电压为-163.84mv ~ 163.84mv
     ina228_i2c_write(I2C2, INA228_I2C_ADDR, config_data, 3);
-	//配置分流电阻 1ma/(2^19) * 100欧 * 13107.2 * 1000000 = 2500 = 0x09C4
+	//配置分流电阻 
     ina228_i2c_write(I2C2, INA228_I2C_ADDR, shunt_cal, 3);
 }
 
@@ -93,19 +93,19 @@ double ina228_read(ina228_regs_t reg)
 			reg_addr = 0x08;
 			ina228_i2c_read(I2C2, INA228_I2C_ADDR, reg_addr, data, 3);
 			read_data = (data[0] << 16) | (data[1] << 8) | data[2];
-			// ret = read_data * 0.01;  // 根据数据手册转换
+			ret = read_data * 0.01;  // 根据数据手册转换
 		break;
 		case CURRENT:
 			reg_addr = 0x07;
 			ina228_i2c_read(I2C2, INA228_I2C_ADDR, reg_addr, data, 3);
 			read_data = (data[0] << 16) | (data[1] << 8) | data[2];
-			// ret = read_data * 0.0001;  // 根据数据手册转换
+			ret = read_data * 0.0001;  // 根据数据手册转换
 		break;
 		case VBUS:
 			reg_addr = 0x05;
 			ina228_i2c_read(I2C2, INA228_I2C_ADDR, reg_addr, data, 3);
 			read_data = (data[0] << 16) | (data[1] << 8) | data[2];
-			// ret = read_data * 0.001;  // 根据数据手册转换
+			ret = read_data * 0.001;  // 根据数据手册转换
 		break;
 		default:
 		break;
