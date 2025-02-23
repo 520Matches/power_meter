@@ -15,6 +15,15 @@
 
 __IO uint8_t PrevXferComplete = 1;
 
+void usb_init(void)
+{
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
+    // USB_Cable_Config(ENABLE);
+    Set_USBClock();
+    USB_Interrupts_Config();
+    USB_Init();
+}
+
 // void usb_write(uint8_t *buf, uint32_t len)
 // {
 // 	PrevXferComplete = 0;
@@ -89,6 +98,8 @@ int main(void)
 	double current = 0.0;
 
 	timer_init();
+
+	usb_init();
 	
 	ina228_init();
 
