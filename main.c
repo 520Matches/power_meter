@@ -99,7 +99,7 @@ int main(void)
 
 	timer_init();
 
-	usb_init();
+	// usb_init();
 	
 	ina228_init();
 
