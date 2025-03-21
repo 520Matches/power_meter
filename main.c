@@ -17,11 +17,19 @@ __IO uint8_t PrevXferComplete = 1;
 
 void usb_init(void)
 {
+	GPIO_InitTypeDef  GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
-    // USB_Cable_Config(ENABLE);
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
     Set_USBClock();
-    USB_Interrupts_Config();
     USB_Init();
+    USB_Interrupts_Config();
+    USB_Cable_Config(ENABLE);
 }
 
 // void usb_write(uint8_t *buf, uint32_t len)
@@ -99,17 +107,17 @@ int main(void)
 
 	timer_init();
 
-	// usb_init();
+	usb_init();
 	
-	ina228_init();
+	// ina228_init();
 
 	while(1)
 	{
 		if(timer_event)
 		{
 			timer_event = 0;
-			vbus    = ina228_read(VBUS);
-			current = ina228_read(CURRENT);
+			// vbus    = ina228_read(VBUS);
+			// current = ina228_read(CURRENT);
 		}
 	}
 
