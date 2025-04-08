@@ -6,7 +6,7 @@
 #include "usb_init.h"
 #include "usb_regs.h"
 #include "usb_sil.h"
-
+#include "usb_istr.h"
 #include "hw_config.h"
 
 #include "ina228.h"
@@ -32,63 +32,29 @@ void usb_init(void)
     USB_Cable_Config(ENABLE);
 }
 
-// void usb_write(uint8_t *buf, uint32_t len)
+// void usb_write(uint8_t *report, uint8_t len)
 // {
 // 	PrevXferComplete = 0;
-//
-//     /* Copy mouse position info in ENDP1 Tx Packet Memory Area*/
-//     USB_SIL_Write(EP1_IN, buf, len);
-//     /* Enable endpoint for transmission */
-//     SetEPTxValid(ENDP1);
+// 	USB_SIL_Write(EP1_IN, report, len);
+// 	SetEPTxValid(EP1_IN);
 // }
+void usb_write(uint8_t *buf, uint32_t len)
+{
+	PrevXferComplete = 0;
+    // 检查端点是否就绪
+    if (GetEPTxStatus(ENDP1) != EP_TX_VALID) {
+        // 复制数据到发送缓冲区
+        UserToPMABufferCopy(buf, GetEPTxAddr(ENDP1), len);
+        // 设置发送有效
+        SetEPTxCount(ENDP1, len);
+        SetEPTxValid(ENDP1);
+    }
+}
 
-// void system_init(void)
-// {
-//   GPIO_InitTypeDef  GPIO_InitStructure;  
-//   /*!< At this stage the microcontroller clock setting is already configured, 
-//        this is done through SystemInit() function which is called from startup
-//        file (startup_stm32xxx.s) before to branch to application main.
-//        To reconfigure the default setting of SystemInit() function, refer to
-//        system_stm32xxx.c file
-//      */ 
-//   
-//   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-//   
-//   /********************************************/
-//   /*  Configure USB DM/DP pins                */
-//   /********************************************/
-//   
-//   
-//   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12;
-//   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-//   GPIO_Init(GPIOA, &GPIO_InitStructure);
-//   
-//   /* Enable all GPIOs Clock*/
-//   RCC_APB2PeriphClockCmd(RCC_APB2Periph_ALLGPIO, ENABLE);
-//
-//   
-//   /********************************************/
-//   /* Enable the USB PULL UP                   */
-//   /********************************************/
-// //   /* USB_DISCONNECT used as USB pull-up */
-// //   GPIO_InitStructure.GPIO_Pin = USB_DISCONNECT_PIN;
-// //   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-// //   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-// //   GPIO_Init(USB_DISCONNECT, &GPIO_InitStructure);
-// //   
-// //   /* Enable the USB disconnect GPIO clock */
-// //   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIO_DISCONNECT, ENABLE);
-// }
 
 int main(void)
 {
-	// uint8_t buf[5] = {0x01, 0x02, 0x03, 0x04, 0x05};
-	//
-	// Set_System();
-	// USB_Interrupts_Config();
-	// Set_USBClock();
-	// USB_Init();
+	uint8_t buf[8] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
 	//
 	// while(1)
 	// {
@@ -118,8 +84,26 @@ int main(void)
 			timer_event = 0;
 			// vbus    = ina228_read(VBUS);
 			// current = ina228_read(CURRENT);
+			if(bDeviceState == CONFIGURED)
+			{
+				if(PrevXferComplete)
+				{
+					usb_write(buf, sizeof(buf)/sizeof(buf[0]));
+					// RHIDCheckState();
+				}
+			}
 		}
 	}
 
     return 0;
 }
+
+/**
+  * @brief  USB低优先级/CAN接收中断服务函数
+  * @note   此函数处理所有USB事件（如数据传输、复位、挂起等）
+  */
+void USB_LP_CAN1_RX0_IRQHandler(void) {
+  // 调用USB中断处理函数
+  USB_Istr();
+}
+
