@@ -78,66 +78,6 @@ const uint8_t CustomHID_DeviceDescriptor[CUSTOMHID_SIZ_DEVICE_DESC] =
 
 /* USB Configuration Descriptor */
 /*   All Descriptors (Configuration, Interface, Endpoint, Class, Vendor */
-// const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
-//   {
-//     0x09, /* bLength: Configuration Descriptor size */
-//     USB_CONFIGURATION_DESCRIPTOR_TYPE, /* bDescriptorType: Configuration */
-//     CUSTOMHID_SIZ_CONFIG_DESC,
-//     /* wTotalLength: Bytes returned */
-//     0x00,
-//     0x01,         /* bNumInterfaces: 1 interface */
-//     0x01,         /* bConfigurationValue: Configuration value */
-//     0x00,         /* iConfiguration: Index of string descriptor describing
-//                                  the configuration*/
-//     0xC0,         /* bmAttributes: Self powered */
-//     0x32,         /* MaxPower 100 mA: this current is used for detecting Vbus */
-//
-//     /************** Descriptor of Custom HID interface ****************/
-//     /* 09 */
-//     0x09,         /* bLength: Interface Descriptor size */
-//     USB_INTERFACE_DESCRIPTOR_TYPE,/* bDescriptorType: Interface descriptor type */
-//     0x00,         /* bInterfaceNumber: Number of Interface */
-//     0x00,         /* bAlternateSetting: Alternate setting */
-//     0x02,         /* bNumEndpoints */
-//     0x03,         /* bInterfaceClass: HID */
-//     0x00,         /* bInterfaceSubClass : 1=BOOT, 0=no boot */
-//     0x00,         /* nInterfaceProtocol : 0=none, 1=keyboard, 2=mouse */
-//     0,            /* iInterface: Index of string descriptor */
-//     /******************** Descriptor of Custom HID HID ********************/
-//     /* 18 */
-//     0x09,         /* bLength: HID Descriptor size */
-//     HID_DESCRIPTOR_TYPE, /* bDescriptorType: HID */
-//     0x10,         /* bcdHID: HID Class Spec release number */
-//     0x01,
-//     0x00,         /* bCountryCode: Hardware target country */
-//     0x01,         /* bNumDescriptors: Number of HID class descriptors to follow */
-//     0x22,         /* bDescriptorType */
-//     CUSTOMHID_SIZ_REPORT_DESC,/* wItemLength: Total length of Report descriptor */
-//     0x00,
-//     /******************** Descriptor of Custom HID endpoints ******************/
-//     /* 27 */
-//     0x07,          /* bLength: Endpoint Descriptor size */
-//     USB_ENDPOINT_DESCRIPTOR_TYPE, /* bDescriptorType: */
-//
-//     0x81,          /* bEndpointAddress: Endpoint Address (IN) */
-//     0x03,          /* bmAttributes: Interrupt endpoint */
-//     0x02,          /* wMaxPacketSize: 2 Bytes max */
-//     0x00,
-//     0x20,          /* bInterval: Polling Interval (32 ms) */
-//     /* 34 */
-//     	
-//     0x07,	/* bLength: Endpoint Descriptor size */
-//     USB_ENDPOINT_DESCRIPTOR_TYPE,	/* bDescriptorType: */
-// 			/*	Endpoint descriptor type */
-//     0x01,	/* bEndpointAddress: */
-// 			/*	Endpoint Address (OUT) */
-//     0x03,	/* bmAttributes: Interrupt endpoint */
-//     0x02,	/* wMaxPacketSize: 2 Bytes max  */
-//     0x00,
-//     0x20,	/* bInterval: Polling Interval (20 ms) */
-//     /* 41 */
-//   }; /* CustomHID_ConfigDescriptor */
-
 //---------------------------------------------------------!
 const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
   {
@@ -190,7 +130,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     0x07,	/* bLength: Endpoint Descriptor size */
     USB_ENDPOINT_DESCRIPTOR_TYPE,	/* bDescriptorType: */
 			/*	Endpoint descriptor type */
-    0x01,	/* bEndpointAddress: */
+    0x02,	/* bEndpointAddress: */
 			/*	Endpoint Address (OUT) */
     0x03,	/* bmAttributes: Interrupt endpoint */
     0x09,	/* wMaxPacketSize: 2 Bytes max  */
@@ -199,46 +139,6 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     /* 41 */
   }; /* CustomHID_ConfigDescriptor */
 //---------------------------------------------------------!
-
-// const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] = {
-//   //------------------------- 配置描述符 -------------------------//
-//   0x09,        /* bLength: 配置描述符长度（9字节） */
-//   USB_CONFIGURATION_DESCRIPTOR_TYPE,        /* bDescriptorType: 配置描述符类型 */
-//   CUSTOMHID_SIZ_CONFIG_DESC, 0x00,  /* wTotalLength: 配置描述符总长度（32字节） */
-//   0x01,        /* bNumInterfaces: 接口数量（1个） */
-//   0x01,        /* bConfigurationValue: 配置值（1） */
-//   0x00,        /* iConfiguration: 配置字符串索引（无） */
-//   0xC0,        /* bmAttributes: 自供电设备 */
-//   0x32,        /* MaxPower: 最大电流100mA */
-//
-//   //------------------------- 接口描述符 -------------------------//
-//   0x09,        /* bLength: 接口描述符长度（9字节） */
-//   USB_INTERFACE_DESCRIPTOR_TYPE,        /* bDescriptorType: 接口描述符类型 */
-//   0x00,        /* bInterfaceNumber: 接口编号（0） */
-//   0x00,        /* bAlternateSetting: 备用设置（0） */
-//   0x01,        /* bNumEndpoints: 端点数量（仅1个IN端点） */
-//   0x03,        /* bInterfaceClass: HID类 */
-//   0x00,        /* bInterfaceSubClass: 无引导协议 */
-//   0x00,        /* bInterfaceProtocol: 无协议 */
-//   0x00,        /* iInterface: 接口字符串索引（无） */
-//
-//   //------------------------- HID描述符 -------------------------//
-//   0x09,        /* bLength: HID描述符长度（9字节） */
-//   HID_DESCRIPTOR_TYPE,        /* bDescriptorType: HID描述符类型 */
-//   0x10, 0x01,  /* bcdHID: HID协议版本1.11 */
-//   0x00,        /* bCountryCode: 无国家代码 */
-//   0x01,        /* bNumDescriptors: 后续描述符数量（1个） */
-//   0x22,        /* bDescriptorType: 报告描述符类型 */
-//   CUSTOMHID_SIZ_REPORT_DESC, 0x00,  /* wDescriptorLength: 报告描述符长度（31字节） */
-//
-//   //------------------------- IN端点描述符 -------------------------//
-//   0x07,        /* bLength: 端点描述符长度（7字节） */
-//   USB_ENDPOINT_DESCRIPTOR_TYPE,        /* bDescriptorType: 端点描述符类型 */
-//   0x81,        /* bEndpointAddress: IN端点1 */
-//   0x03,        /* bmAttributes: Interrupt传输 */
-//   0x09, 0x00,  /* wMaxPacketSize: 最大包长度9字节 */
-//   0x0A         /* bInterval: 轮询间隔10ms */
-// };
 
 const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] = {
 	0x06, 0x00, 0xFF,  // Usage Page (Vendor Defined 0xFF00)

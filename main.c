@@ -54,19 +54,7 @@ void usb_write(uint8_t *buf, uint32_t len)
 
 int main(void)
 {
-	uint8_t buf[8] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
-	//
-	// while(1)
-	// {
-	// 	if(bDeviceState == CONFIGURED)
-	// 	{
-	// 		if(PrevXferComplete)
-	// 		{
-	// 			usb_write(buf, sizeof(buf)/sizeof(buf[0]));
-	// 			// RHIDCheckState();
-	// 		}
-	// 	}
-	// }
+	uint8_t buf[9] = {0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
 	
 	double vbus    = 0.0;
 	double current = 0.0;
@@ -75,15 +63,15 @@ int main(void)
 
 	usb_init();
 	
-	// ina228_init();
+	ina228_init();
 
 	while(1)
 	{
 		if(timer_event)
 		{
 			timer_event = 0;
-			// vbus    = ina228_read(VBUS);
-			// current = ina228_read(CURRENT);
+			vbus    = ina228_read(VBUS);
+			current = ina228_read(CURRENT);
 			if(bDeviceState == CONFIGURED)
 			{
 				if(PrevXferComplete)
