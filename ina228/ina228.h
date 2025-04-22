@@ -1,6 +1,8 @@
 #ifndef __INA228_H
 #define __INA228_H
 
+#include <stdint.h>
+
 typedef enum
 {
 	VSHUNT = 0,
@@ -10,7 +12,7 @@ typedef enum
 }ina228_regs_t;
 
 void ina228_init(void);
-double ina228_read(ina228_regs_t reg);
+uint32_t ina228_read(ina228_regs_t reg);
 
 // int ina228_deinit(void);
 

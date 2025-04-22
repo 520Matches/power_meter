@@ -56,8 +56,9 @@ int main(void)
 {
 	uint8_t buf[9] = {0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
 	
-	double vbus    = 0.0;
-	double current = 0.0;
+	// double vbus    = 0.0;
+	// double current = 0.0;
+	uint32_t current = 0;
 
 	timer_init();
 
@@ -70,8 +71,12 @@ int main(void)
 		if(timer_event)
 		{
 			timer_event = 0;
-			vbus    = ina228_read(VBUS);
+			// vbus    = ina228_read(VBUS);
 			current = ina228_read(CURRENT);
+			buf[1] = current & 0xFF;
+			buf[2] = (current >> 8) & 0xFF;
+			buf[3] = (current >> 16) & 0xFF;
+			buf[4] = (current >> 24) & 0xFF;
 			if(bDeviceState == CONFIGURED)
 			{
 				if(PrevXferComplete)

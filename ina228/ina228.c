@@ -140,12 +140,13 @@ void ina228_init(void)
     ina228_i2c_write(I2C2, INA228_I2C_ADDR, config_tempco, 3);
 }
 
-double ina228_read(ina228_regs_t reg)
+uint32_t ina228_read(ina228_regs_t reg)
 {
-	double ret = 0.0;
+	// double ret = 0.0;
     uint8_t reg_addr = 0x07;  // 电流寄存器地址
     uint8_t data[3] = {0};
 	int32_t read_data = 0;
+	uint32_t ret = 0;
 
 	switch(reg)
 	{
@@ -167,7 +168,8 @@ double ina228_read(ina228_regs_t reg)
 			{
 				read_data |= 0xFFF00000;
 			}
-			ret = read_data * current_lsb;
+			ret = read_data * 409600 / 524288;//0.1ua
+			// ret = read_data * current_lsb;
 		break;
 		case VBUS:
 			reg_addr = 0x05;
